@@ -17,27 +17,15 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
+    // Process form data here
 
-    const response = await fetch("http://localhost:8000/send-email/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: new URLSearchParams(formData),
-    });
-
-    if (response.ok) {
-      setSubmitted(true);
-    } else {
-      const errorText = await response.text();
-      console.error("Failed to send message:", errorText);
-    }
+    setSubmitted(true);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-50">
+    <div className="flex flex-col items-center justify-center bg-gradient-to-b from-blue-300 to-purple-500 min-h-screen min-h-screen p-4 bg-gray-50">
       <div className="max-w-lg w-full bg-white p-6 rounded-lg shadow-lg">
         <h1 className="text-2xl font-semibold text-center mb-4">Contact Us</h1>
         <form onSubmit={handleSubmit} className="space-y-3">

@@ -11,23 +11,14 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const formData = new URLSearchParams();
-      formData.append("username", email);
-      formData.append("password", password);
-
-      const response = await axios.post(
-        "http://localhost:8000/login",
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        }
-      );
+      const response = await axios.post("http://localhost:8000/login", {
+        username: email,
+        password: password,
+      });
 
       if (response.data.access_token) {
         localStorage.setItem("token", response.data.access_token);
-        navigate("/home");
+        navigate("/dashboard");
       }
     } catch (err) {
       setError("Invalid email or password");
@@ -35,7 +26,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-blue-300 to-purple-500">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2
           className="text-2xl font-bold text-center mb-6"
