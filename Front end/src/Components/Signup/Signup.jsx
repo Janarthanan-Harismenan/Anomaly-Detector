@@ -19,7 +19,7 @@ const Signup = () => {
   const handleSignup = async () => {
     try {
       const response = await fetch("http://localhost:8000/signup", {
-        method: "POST",
+        method: "POST", // hello
         headers: {
           "Content-Type": "application/json",
         },
