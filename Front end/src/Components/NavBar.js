@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from "../Assets/Logo-removebg-preview.png";
+import Logo from "../Assets/Logo.ico";
 
 const Navbar = () => {
   return (
@@ -14,14 +14,14 @@ const Navbar = () => {
         <a href="/Home" className="text-white hover:text-purple-300">
           Home
         </a>
+        <a href="/Form" className="text-white hover:text-purple-300">
+          Test
+        </a>
         <a href="/signup" className="text-white hover:text-purple-300">
           Sign Up
         </a>
         <a href="/login" className="text-white hover:text-purple-300">
           Login
-        </a>
-        <a href="/Form" className="text-white hover:text-purple-300">
-          Test
         </a>
         <a href="/About" className="text-white hover:text-purple-300">
           About

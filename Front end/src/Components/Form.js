@@ -1,7 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { detectAnomaly } from "./api"; // Import the function from your api.js file
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const Form = () => {
+  const navigate = useNavigate(); // Initialize useNavigate for redirection
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    // If no token is found, redirect to login
+    if (token === "null") {
+      navigate("/login");
+    }
+  }, [navigate]);
+
   // Initialize state for form data and anomaly result
   const [formData, setFormData] = useState({
     container_fs_usage_bytes: "",

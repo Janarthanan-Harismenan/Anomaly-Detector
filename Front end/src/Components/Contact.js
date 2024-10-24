@@ -8,6 +8,7 @@ const Contact = () => {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,15 +18,33 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Process form data here
 
-    setSubmitted(true);
+    try {
+      const response = await fetch("http://localhost:8000/send-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+        setError(false);
+        setFormData({ name: "", email: "", message: "" }); // Clear form
+      } else {
+        setError(true);
+        setSubmitted(false);
+      }
+    } catch (error) {
+      setError(true);
+    }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center bg-gradient-to-b from-blue-300 to-purple-500 min-h-screen min-h-screen p-4 bg-gray-50">
+    <div className="flex flex-col items-center justify-center bg-gradient-to-b from-blue-300 to-purple-500 min-h-screen p-4 bg-gray-50">
       <div className="max-w-lg w-full bg-white p-6 rounded-lg shadow-lg">
         <h1 className="text-2xl font-semibold text-center mb-4">Contact Us</h1>
         <form onSubmit={handleSubmit} className="space-y-3">
@@ -92,6 +111,11 @@ const Contact = () => {
           {submitted && (
             <p className="text-green-600 text-center mt-4">
               Your message has been sent successfully!
+            </p>
+          )}
+          {error && (
+            <p className="text-red-600 text-center mt-4">
+              Failed to send the message. Please try again later.
             </p>
           )}
         </form>

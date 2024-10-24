@@ -12,6 +12,7 @@ import joblib
 import numpy as np
 import jwt
 import datetime
+import requests
 
 # MongoDB connection
 client = MongoClient("mongodb://localhost:27017")
@@ -57,6 +58,11 @@ class SignupInput(BaseModel):
     name: str = Field(..., min_length=3, max_length=50)
     email: EmailStr
     password: str = Field(..., min_length=8)
+
+class ContactForm(BaseModel):
+    name: str = Field(..., min_length=3, max_length=50)
+    email: EmailStr
+    message: str = Field(..., min_length=10)
 
 # Utility functions for password handling
 def hash_password(password: str):
@@ -128,37 +134,34 @@ async def detect_anomaly(input_data: AnomalyDetectionInput):
 
     return {"anomaly_class": anomaly_class}
 
-@app.post("/send-email/")
-async def send_email(name: str = Form(...), email: str = Form(...), message: str = Form(...)):
-    sender_email = "hh8211318@gmail.com"
-    sender_password = "your_app_password_here"  # Use App Password here
-    recipient_email = "janarthananharismenan001@gmail.com"
 
-    subject = f"Contact Us Form Submission from {name}"
-    body = f"Name: {name}\nEmail: {email}\nMessage:\n{message}"
+
+# Email sending using EmailJS
+@app.post("/send-email/")
+async def send_email_emailjs(contact_form: ContactForm):
+    EMAILJS_API_URL = "https://api.emailjs.com/api/v1.0/email/send"
+    EMAILJS_SERVICE_ID = "service_vh6oywi"
+    EMAILJS_TEMPLATE_ID = "template_anfen6n"
+    EMAILJS_USER_ID = "LrWX5POGvvu-WhDUN"  # Use your public key here
+
+
+    payload = {
+        "service_id": EMAILJS_SERVICE_ID,
+        "template_id": EMAILJS_TEMPLATE_ID,
+        "user_id": EMAILJS_USER_ID,
+        "template_params": {
+            "from_name": contact_form.name,
+            "from_email": contact_form.email,
+            "message": contact_form.message,
+        }
+    }
 
     try:
-        msg = MIMEMultipart()
-        msg['From'] = sender_email
-        msg['To'] = recipient_email
-        msg['Subject'] = subject
-        msg.attach(MIMEText(body, 'plain'))
-
-        with smtplib.SMTP('smtp.gmail.com', 587) as server:
-            server.starttls()
-            server.login(sender_email, sender_password)
-            server.send_message(msg)
-
-        return JSONResponse(content={"message": "Email sent successfully!"}, status_code=200)
-
-    except smtplib.SMTPAuthenticationError:
-        return JSONResponse(content={"error": "SMTP Authentication failed. Check your credentials."}, status_code=500)
+        response = requests.post(EMAILJS_API_URL, json=payload)
+        response_data = response.json()  # Get the JSON response from EmailJS
+        if response.status_code == 200:
+            return JSONResponse(content={"message": "Email sent successfully!"}, status_code=200)
+        else:
+            return JSONResponse(content={"error": f"Failed to send email. Response: {response_data}"}, status_code=response.status_code)
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
-
-# To run the app, use the command:
-# uvicorn main:app --reload

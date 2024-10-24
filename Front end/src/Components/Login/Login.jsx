@@ -12,13 +12,17 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:8000/login", {
-        username: email,
+        email: email, // Change 'username' to 'email'
         password: password,
       });
 
       if (response.data.access_token) {
         localStorage.setItem("token", response.data.access_token);
-        navigate("/dashboard");
+
+        // console log token
+        console.log("Token: ", response.data.access_token);
+
+        navigate("/home");
       }
     } catch (err) {
       setError("Invalid email or password");
