@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link,useNavigate } from 'react-router-dom';
 import Image from "../../Assets/Image.jpg"; // Import your image
 import './HomePage.css';
@@ -7,6 +7,15 @@ const HomePage = () => {
 
     const navigate = useNavigate(); // Initialize useNavigate for redirection
 
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+    
+        // If no token is found, redirect to login
+        if (!token) {
+          navigate("/login");
+        }
+      }, [navigate]);
+    
     const handleLogout = () => {
         // Remove token from localStorage or sessionStorage (wherever you stored it)
         localStorage.removeItem("authToken");
