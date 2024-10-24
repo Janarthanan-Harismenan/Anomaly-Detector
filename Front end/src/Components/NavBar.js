@@ -14,6 +14,12 @@ const Navbar = () => {
         <a href="/Home" className="text-white hover:text-purple-300">
           Home
         </a>
+        <a href="/signup" className="text-white hover:text-purple-300">
+          Sign Up
+        </a>
+        <a href="/login" className="text-white hover:text-purple-300">
+          Login
+        </a>
         <a href="/Form" className="text-white hover:text-purple-300">
           Test
         </a>
