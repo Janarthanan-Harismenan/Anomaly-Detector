@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./Signup.css";
 
+import { useNavigate } from "react-router-dom";
+
 import user_icon from "../../Assets/LoginSignup/person.png";
 import email_icon from "../../Assets/LoginSignup/mail.png";
 import password_icon from "../../Assets/LoginSignup/key.png";
@@ -33,6 +35,10 @@ const Signup = () => {
       const data = await response.json();
       setSuccess(data.message || "Signup successful!");
       setError(null);
+      
+      // Navigate to Login page
+      navigate("/login");
+      
     } catch (err) {
       setError("An error occurred during signup");
       setSuccess(null);
