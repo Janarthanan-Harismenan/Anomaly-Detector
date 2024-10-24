@@ -3,7 +3,7 @@ import "./App.css";
 import Signup from "./Components/Signup/Signup";
 import Login from "./Components/Login/Login";
 import LandingPage from "./Components/LandingPage/LandingPage";
-import HomePage from "./Components/HomePage";
+import HomePage from "./Components/HomePage/HomePage";
 import Form from "./Components/Form";
 import About from "./Components/About";
 import Contact from "./Components/Contact";
