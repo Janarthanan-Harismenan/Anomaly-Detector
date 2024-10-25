@@ -46,6 +46,9 @@ const HomePage = () => {
           <Link to="/Form">
             <button className="btn btn-purple hover-purple">Test</button>
           </Link>
+          <Link to="/anomaly-display">
+            <button className="btn btn-purple hover-purple">Live Run</button>
+          </Link>
           <button className="btn btn-red hover-red" onClick={handleLogout}>
             Logout
           </button>
