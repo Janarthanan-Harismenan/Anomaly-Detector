@@ -8,6 +8,7 @@ import Form from "./Components/Form";
 import About from "./Components/About";
 import Contact from "./Components/Contact";
 import Header from "./Components/Header";
+import AnomalyDisplay from "./Components/AnomalyDisplay"; // Import the AnomalyDisplay component
 
 function App() {
   return (
@@ -21,10 +22,12 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-
           {/* Restricted Routes */}
           <Route path="/home" element={<HomePage />} />
           <Route path="/form" element={<Form />} />
+          {/* Anomaly Display Route */}
+          <Route path="/anomaly-display" element={<AnomalyDisplay />} />{" "}
+          {/* Add this line */}
         </Routes>
       </Router>
     </div>

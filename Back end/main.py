@@ -1,15 +1,13 @@
 from fastapi import FastAPI, Form, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+import json
+import joblib
+import numpy as np
 import re
 from pydantic import BaseModel, EmailStr, Field
 from pymongo import MongoClient
 from passlib.context import CryptContext
-import joblib
-import numpy as np
 import jwt
 import datetime
 import requests
@@ -34,14 +32,21 @@ app.add_middleware(
 # Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+# Load JSON data once during startup for the /data endpoint
+json_file_path = "C:/Users/Harismenan/OneDrive/Desktop/Projects/Data Science Project/Web App/Back end/Dummy.json"
+
 # Load the pre-trained anomaly detection model
 model = joblib.load("anomaly_detection_model.sav")
 
-# Security settings for JWT
-SECRET_KEY = "your_secret_key_here"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+# Load JSON data
+data = None
+@app.on_event("startup")
+def load_json_data():
+    global data
+    with open(json_file_path) as f:
+        data = json.load(f)
 
+# Request model for anomaly detection
 class AnomalyDetectionInput(BaseModel):
     container_fs_usage_bytes: float
     container_memory_rss: float
@@ -49,6 +54,11 @@ class AnomalyDetectionInput(BaseModel):
     container_network_receive_bytes_total: float
     container_network_receive_errors_total: float
     container_memory_failures_total: float
+
+# Response model
+class AnomalyDetectionResponse(BaseModel):
+    input_data: AnomalyDetectionInput
+    anomaly_class: int
 
 class LoginInput(BaseModel):
     email: str
@@ -79,6 +89,10 @@ def validate_password_strength(password: str):
         )
 
 # JWT token creation
+SECRET_KEY = "your_secret_key_here"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
 def create_access_token(data: dict, expires_delta: datetime.timedelta = None):
     to_encode = data.copy()
     if expires_delta:
@@ -87,6 +101,36 @@ def create_access_token(data: dict, expires_delta: datetime.timedelta = None):
         expire = datetime.datetime.utcnow() + datetime.timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+@app.post("/detect-anomalies-from-data", response_model=list[AnomalyDetectionResponse])
+async def detect_anomalies_from_data():
+    anomaly_results = []
+
+    for item in data:
+        input_data = AnomalyDetectionInput(
+            container_fs_usage_bytes=item.get("container_fs_usage_bytes"),
+            container_memory_rss=item.get("container_memory_rss"),
+            container_cpu_system_seconds_total=item.get("container_cpu_system_seconds_total"),
+            container_network_receive_bytes_total=item.get("container_network_receive_bytes_total"),
+            container_network_receive_errors_total=item.get("container_network_receive_errors_total"),
+            container_memory_failures_total=item.get("container_memory_failures_total"),
+        )
+
+        features = [
+            input_data.container_fs_usage_bytes,
+            input_data.container_memory_rss,
+            input_data.container_cpu_system_seconds_total,
+            input_data.container_network_receive_bytes_total,
+            input_data.container_network_receive_errors_total,
+            input_data.container_memory_failures_total
+        ]
+
+        prediction = model.predict([features])
+        anomaly_class = int(prediction[0])
+
+        anomaly_results.append(AnomalyDetectionResponse(input_data=input_data, anomaly_class=anomaly_class))
+
+    return anomaly_results
 
 @app.post("/signup")
 def signup(user_data: SignupInput):
@@ -134,7 +178,10 @@ async def detect_anomaly(input_data: AnomalyDetectionInput):
 
     return {"anomaly_class": anomaly_class}
 
-
+# Serve JSON data from the file on a separate route
+@app.get("/data")
+async def serve_json():
+    return data
 
 # Email sending using EmailJS
 @app.post("/send-email/")
@@ -143,7 +190,6 @@ async def send_email_emailjs(contact_form: ContactForm):
     EMAILJS_SERVICE_ID = "service_vh6oywi"
     EMAILJS_TEMPLATE_ID = "template_anfen6n"
     EMAILJS_USER_ID = "LrWX5POGvvu-WhDUN"  # Use your public key here
-
 
     payload = {
         "service_id": EMAILJS_SERVICE_ID,

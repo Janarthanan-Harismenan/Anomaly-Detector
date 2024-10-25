@@ -40,7 +40,12 @@ const HomePage = () => {
       <div className="flex space-x-4">
         <Link to="/Form">
           <button className="bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700">
-            Test
+            Test One
+          </button>
+        </Link>
+        <Link to="/anomaly-display">
+          <button className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
+            Live Check
           </button>
         </Link>
         <button

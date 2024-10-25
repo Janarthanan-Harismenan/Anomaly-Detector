@@ -1,0 +1,18 @@
+[
+  {
+    "container_fs_usage_bytes": 123456,
+    "container_memory_rss": 512000,
+    "container_cpu_system_seconds_total": 120.5,
+    "container_network_receive_bytes_total": 10000,
+    "container_network_receive_errors_total": 0,
+    "container_memory_failures_total": 1
+  },
+  {
+    "container_fs_usage_bytes": 654321,
+    "container_memory_rss": 256000,
+    "container_cpu_system_seconds_total": 115.2,
+    "container_network_receive_bytes_total": 20000,
+    "container_network_receive_errors_total": 1,
+    "container_memory_failures_total": 0
+  }
+]
