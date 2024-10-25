@@ -23,7 +23,7 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen max-h-screen p-4 bg-gray-100">
-      <h1 className="text-2xl font-bold text-purple-600 mb-2">
+      <h1 className="text-2xl font-bold text-purple-600 mb-2 mt-2">
         Anomaly Detector on Microservices
       </h1>
       <img
