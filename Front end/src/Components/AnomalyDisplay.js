@@ -8,6 +8,25 @@ const AnomalyDisplay = () => {
   const [error, setError] = useState("");
   const [isPlaying, setIsPlaying] = useState(false);
 
+  // Define mapping array of error types
+  const anomalyLabels = [
+    "Working",
+    "high cpu dispatch",
+    "high fileIO payment",
+    "high latency user",
+    "high latency user",
+    "high load",
+    "low bandwidth user",
+    "low bandwidth user",
+    "memory leak cart",
+    "out of order packets",
+    "out of order packets",
+    "packet loss",
+    "packet loss",
+    "rt-delay",
+    "service down payment",
+  ];
+
   const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
@@ -111,7 +130,9 @@ const AnomalyDisplay = () => {
                   : "text-red-600"
               }
             >
-              Anomaly Class : {anomalyData[currentIndex].anomaly_class}
+              {anomalyData[currentIndex]?.anomaly_class === 0
+                ? "Working"
+                : `Anomaly Class: ${anomalyData[currentIndex].anomaly_class}`}
             </span>
           </h3>
         </div>

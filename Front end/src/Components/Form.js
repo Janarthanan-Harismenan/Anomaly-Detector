@@ -26,9 +26,21 @@ const Form = () => {
 
   // Define mapping array of error types
   const anomalyLabels = [
-    "Working", "high cpu dispatch", "high fileIO payment", "high latency user", "high latency user",
-    "high load", "low bandwidth user", "low bandwidth user", "memory leak cart", "out of order packets", 
-    "out of order packets", "packet loss", "packet loss", "rt-delay", "service down payment"
+    "Working",
+    "high cpu dispatch",
+    "high fileIO payment",
+    "high latency user",
+    "high latency user",
+    "high load",
+    "low bandwidth user",
+    "low bandwidth user",
+    "memory leak cart",
+    "out of order packets",
+    "out of order packets",
+    "packet loss",
+    "packet loss",
+    "rt-delay",
+    "service down payment",
   ];
 
   const [anomalyClass, setAnomalyClass] = useState(null);
@@ -128,8 +140,10 @@ const Form = () => {
         {/* Display message after submission */}
         {submitted && (
           <p className="text-green-600 text-center mt-4">
-            Anomaly Class:{" "}
-            {anomalyClass !== null ? anomalyLabels[anomalyClass] : "Calculating..."}
+            Anomaly Class :{" "}
+            {anomalyClass !== null
+              ? anomalyLabels[anomalyClass]
+              : "Calculating..."}
           </p>
         )}
       </form>
