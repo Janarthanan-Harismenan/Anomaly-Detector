@@ -1,0 +1,18 @@
+{
+  "input 1": {
+    "container_fs_usage_bytes": 335872,
+    "container_memory_rss": 28602368,
+    "container_cpu_system_seconds_total": 0.95,
+    "container_network_receive_bytes_total": 250630,
+    "container_network_receive_errors_total": 0,
+    "container_memory_failures_total": 0
+  },
+  "input 2": {
+    "container_fs_usage_bytes": 335872,
+    "container_memory_rss": 28459008,
+    "container_cpu_system_seconds_total": 0.96,
+    "container_network_receive_bytes_total": 254044,
+    "container_network_receive_errors_total": 0,
+    "container_memory_failures_total": 0
+  }
+}
