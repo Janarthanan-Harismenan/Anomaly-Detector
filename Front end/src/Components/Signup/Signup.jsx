@@ -28,7 +28,7 @@ const Signup = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        setError(errorData.detail || "Signup failed");
+        setError(errorData.detail ? errorData.detail[0].msg : "Signup failed"); // Display specific error message
         setSuccess(null);
         return;
       }

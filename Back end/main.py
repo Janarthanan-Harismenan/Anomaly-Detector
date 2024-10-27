@@ -33,7 +33,8 @@ app.add_middleware(
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # Load JSON data once during startup for the /data endpoint
-json_file_path = "C:/Users/Harismenan/OneDrive/Desktop/Projects/Data Science Project/Web App/Back end/Dummy.json"
+# json_file_path = "C:/Users/Harismenan/OneDrive/Desktop/Projects/Data Science Project/Web App/Back end/Dummy.json"
+json_file_path = "C:/Users/Harismenan/OneDrive/Desktop/Projects/Data Science Project/Web App/Back end/dummy2.json"
 
 # Load the pre-trained anomaly detection model
 model = joblib.load("anomaly_detection_model.sav")
